@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Car list</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<br/>
+<div th:if="${status != null}">
+    <div th:if="${status.isSuccess()}">
+        <div class="alert alert-success" style="text-align: center" role="alert" th:text="${status.toString()}"></div>
+    </div>
+    <div th:if="${!status.isSuccess()}">
+        <div class="alert alert-danger" style="text-align: center" role="alert" th:text="${status.toString()}"></div>
+    </div>
+    <br/>
+</div>
+<div>
+    <a th:href="@{/cars/create}" class="btn btn-outline-dark">Add</a>
+</div>
+<br/>
+<h2>Car list</h2>
+<div class="mb-3 form-group">   
+    <form class="mb-3" th:action="@{/cars}" method="get">
+        <div class="input-group d-flex flex-wrap">
+            <input class="form-control" type="text" th:name="brand" th:value="${brand}" placeholder="Brand">
+            <h6 style="margin: 10px; text-align: center">OR</h6>
+            <input class="form-control" type="text" th:name="modelName" th:value="${modelName}" placeholder="Model">
+            <button class="btn btn-outline-dark" type="submit">Search</button>
+            <a th:href="@{/cars}" class="btn btn-outline-dark">Clear filter</a>
+        </div>
+    </form>
+
+</div>
+<div th:if="${!isFound}">
+    <h6 style="text-align: center">Looks like nothing here with such filter...</h6>
+</div>
+<div th:if="${isFound}">
+    <div class="d-flex flex-wrap">
+        <div th:each="car : ${cars}" class="card card-body" style="width: 18rem; max-width: 320px">
+            <h4 class="card-title" th:text="'Brand: ' + ${car.brand}"></h4>
+            <h6 class="card-subtitle mb-2 text-muted" th:text="'Id: ' + ${car.id}"></h6>
+            <p class="card-text" th:text="'Model: ' + ${car.model}"></p>
+            <h6 class="card-subtitle mb-2 text-muted" th:text="'Year: ' + ${car.year}"></h6>
+            <p class="card-text" th:text="'Price: ' + ${car.price}"></p>
+
+            <a class="btn btn-outline-dark" th:href="@{/cars/{id}/update(id=${car.id})}">Edit</a>
+            <a class="btn btn-outline-dark" th:href="@{/cars/{id}/delete(id=${car.id})}">Remove</a>
+        </div>
+    </div>
+</div>
+</html>
